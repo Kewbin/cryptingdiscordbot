@@ -202,8 +202,11 @@ async def on_message(message):
         await client.send_typing(message.channel)
         server = MinecraftServer.lookup("fireredwood.aternos.me")
         try:
-            status = server.status()
-            embed = discord.Embed(title=':white_check_mark: SERVER IS ONLINE', description=':busts_in_silhouette: PLAYERS: ' + str(status.raw.get('players').get('online')) + '/' + str(status.raw.get('players').get('max')), color= 0x42f548)
+            if status.raw.get('version').get('name') == '§4● Offline':
+                embed = discord.Embed(title=':no_entry: SERVER IS CURRENTLY OFFLINE', color= 0xe0191c)
+            else:
+                status = server.status()
+                embed = discord.Embed(title=':white_check_mark: SERVER IS ONLINE', description=':busts_in_silhouette: PLAYERS: ' + str(status.raw.get('players').get('online')) + '/' + str(status.raw.get('players').get('max')), color= 0x42f548)
         except:
             embed = discord.Embed(title=':no_entry: SERVER IS CURRENTLY OFFLINE', color= 0xe0191c)
         await client.send_message(message.channel, embed=embed)
