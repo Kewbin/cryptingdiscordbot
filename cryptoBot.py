@@ -219,6 +219,6 @@ async def on_message(message):
         embed.add_field(name=':white_small_square: **.stats** <playerName> | *Shows players stats*',value='⠀' ,inline=False)
         await client.send_message(message.channel, embed=embed)
 
-client.run('NTUxMzIyODYwODc1MTUzNDE4.XUmhWQ.khEjeyx_PG5w7F40zfqiVAl5RjE')
+client.run('NTUxMzIyODYwODc1MTUzNDE4.XUmiMQ.fi6sknE_rv4OtdI6ZjrLJlBKI_Q')
 #https://discordapp.com/oauth2/authorize?client_id=551322860875153418&scope=bot&permissions=387072
 
