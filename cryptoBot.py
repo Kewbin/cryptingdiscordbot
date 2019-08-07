@@ -104,24 +104,47 @@ async def on_message(message):
 
     elif '.STATS' == message1:
         await client.send_typing(message.channel)
-        message2 = str(message.content).split(' ',1)[1]
+        try:
+            message2 = str(message.content).split(' ',1)[1].lower()
+
+            if message2.startswith('<@') == True:
+                embed = discord.Embed(title=':no_entry: **ERROR**',description='⠀', color= 0xe0191c)
+                embed.add_field(name=':white_small_square: *Use minecraft nickname!*⠀',value='⠀' ,inline=False)
+                await client.send_message(message.channel, embed=embed)
+                return
+            else:
+                pass
+                
+        except:
+            embed = discord.Embed(title=':no_entry: **USAGE**',description='⠀', color= 0xe0191c)
+            embed.add_field(name=':white_small_square: **.stats** <playerName> | *Shows players stats*⠀',value='⠀' ,inline=False)
+            await client.send_message(message.channel, embed=embed)
+            return
+        
         try:
             mySQLconnection = mysql.connector.connect(host='remotemysql.com',
                 database='3DC9jFsMhS',
                 user='3DC9jFsMhS',
                 password='CAM1XJFAlz')
         except:
-            print('error')
+            embed = discord.Embed(title=':no_entry: SOME **ERROR** OCCURED', color= 0xe0191c)
+            await client.send_message(message.channel, embed=embed)
+            return
 
         playerdata = {}
+        
+        try:
+            sql_select_Query = "select * from luckperms_players where username = '" + str(message2).lower() + "'" 
+            cursor = mySQLconnection .cursor()
+            cursor.execute(sql_select_Query)
+            names = cursor.fetchall()
 
-        sql_select_Query = "select * from luckperms_players where username = '" + str(message2).lower() + "'" 
-        cursor = mySQLconnection .cursor()
-        cursor.execute(sql_select_Query)
-        names = cursor.fetchall()
-
-        for row in names:
-            playerdata.update({row[1] : [row[0], row[2]]})
+            playerdata.update({names[0][1] : [names[0][0], names[0][2]]})
+        except:
+            embed = discord.Embed(title=':no_entry: **ERROR**',description='⠀', color= 0xe0191c)
+            embed.add_field(name=':white_small_square: ***' + message2.upper() + '*** *did not play on FireRedwood server*⠀',value='⠀' ,inline=False)
+            await client.send_message(message.channel, embed=embed)
+            return
 
         try:
             sql_select_Query = "select * from wg_user where uuid = '" + playerdata.get(message2.lower())[0] + "'" 
